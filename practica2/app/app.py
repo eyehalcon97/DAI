@@ -1,6 +1,6 @@
 #./app/app.py
 from flask import Flask
-from flask.wrappers import Request
+
 from markupsafe import escape
 import random
 from flask import request
@@ -8,43 +8,67 @@ import re
 from flask import render_template
 
 app = Flask(__name__)
+
+visitado = []
 # Pagina Principal
 @app.route('/')
 def index():
-  return render_template('index.html')
+    ultimavisita('Home','index','')
+    return render_template('index.html',visitado=visitado)
 
 # Pagina de error de enlace
 @app.errorhandler(404)
 def page_not_found(error):
-    return 'Pagina no encontrada, verifique el enlace'
+    return render_template('error.html',visitado=visitado)
 
 # Pagina estatica con imagen
 @app.route('/estatica')
 def gato():
+    ultimavisita('estatica','gato','')
     foto = '/static/images/gato.jpg alt="Gato"'
-    return render_template('gato.html',foto=foto)
+    return render_template('gato.html',foto=foto,visitado=visitado)
+
+@app.route('/entrar' , methods=['GET', 'POST'] )
+def entrar():
+    ultimavisita('entrar','entrar','')
+    if request.method == 'POST':
+        nombreusuario = request.form['nombre']
+        pws = request.form['pws']
+        return f'hola ' + nombreusuario
+    return render_template('entrar.html',visitado=visitado)
+
+@app.route('/registrar' , methods=['GET', 'POST'] )
+def registrar():
+    ultimavisita('registrar','registrar','')
+    if request.method == 'POST':
+        nombreusuario = request.form['nombre']
+        pws = request.form['pws']
+        return f'hola ' + nombreusuario
+    return render_template('registrar.html',visitado=visitado)
 
 
-@app.route('/pedirdatos/<ejercicio>' , methods=['GET', 'POST'] )
-def pedirdatos(ejercicio):
-        if request.method == 'POST':
-            datos = request.form['datos']
-            if ejercicio == 'ordenacion':
-                return burbuja(datos)
-            elif ejercicio == 'criba':
-                return criba(datos)
-            elif ejercicio == 'fibonacci':
-                return fibonacci(datos)
-            elif ejercicio == 'cadena':
-                return valido(datos)
+@app.route('/pedirdatos/<cadena>' , methods=['GET', 'POST'] )
+def pedirdatos(cadena):
+    ultimavisita('pedirdatos','pedirdatos',cadena)
+    if request.method == 'POST':
+        datos = request.form['datos']
+        if cadena == 'ordenacion':
+            return burbuja(datos)
+        elif cadena == 'criba':
+            return criba(datos)
+        elif cadena == 'fibonacci':
+            return fibonacci(datos)
+        elif cadena == 'cadena':
+            return valido(datos)
 
-        else:    
-            return render_template('pedirdatos.html',ejercicio=ejercicio)
+    else:    
+        return render_template('pedirdatos.html',cadena=cadena,visitado=visitado)
 
 
 # Pagina con dibujos aleatorios
 @app.route('/sgv')
 def sgv():
+    ultimavisita('sgv','sgv','')
     colores= ['red','green','blue', 'yellow','black']
     rectangulox = random.randint(0,500)
     rectanguloy = random.randint(0,500)
@@ -54,12 +78,13 @@ def sgv():
     elipsex = random.randint(0,500)
     elipsey = random.randint(0,500)
     elipsecol = random.choice(colores)
-    return render_template('sgv.html',recposx=recposx, recposy=recposy,rectangulox=rectangulox,rectanguloy=rectanguloy,rectangulocol=rectangulocol,elipsex=elipsex,elipsey=elipsey,elipsecol=elipsecol)
+    return render_template('sgv.html',recposx=recposx, recposy=recposy,rectangulox=rectangulox,rectanguloy=rectanguloy,rectangulocol=rectangulocol,elipsex=elipsex,elipsey=elipsey,elipsecol=elipsecol,visitado=visitado)
 
 # Pagina que ordena los numeros
-@app.route('/ordena/<lista>')
-def burbuja(lista):
-    numeros= lista.split(',')
+@app.route('/ordena/<cadena>')
+def burbuja(cadena):
+    ultimavisita('ordena','burbuja',cadena)
+    numeros= cadena.split(',')
     for numPasada in range(len(numeros)-1,0,-1):
         for i in range(numPasada):
             if numeros[i]>numeros[i+1]:
@@ -69,32 +94,35 @@ def burbuja(lista):
 
 
     solucion = 'La lista ordenada es : ' + str(numeros)
-    return render_template('resultado.html',solucion=solucion)
+    return render_template('resultado.html',solucion=solucion,visitado=visitado)
 
 # Pagina de criba de Eratostenes
-@app.route('/criba/<numero>')
-def criba(numero):
-    lista = list(range(2,int(numero)))
+@app.route('/criba/<cadena>')
+def criba(cadena):
+    ultimavisita('criba','criba',cadena)
+    lista = list(range(2,int(cadena)))
     for x in lista:
         for y in lista:
             if y%x == 0:
                 lista.remove(y)
     lista.insert(0,2)
-    solucion = 'Los numeros primos menores de : ' + numero + ' son ' + str(lista) 
-    return render_template('resultado.html',solucion=solucion)
+    solucion = 'Los numeros primos menores de : ' + cadena + ' son ' + str(lista) 
+    return render_template('resultado.html',solucion=solucion,visitado=visitado)
 
 # Pagina de Fibonacci
-@app.route('/fibonacci/<numero>')
-def fibonacci(numero):
+@app.route('/fibonacci/<cadena>')
+def fibonacci(cadena):
+    ultimavisita('fibonacci','fibonacci',cadena)
     resultado = [ 0 , 1]
-    for i in range(1,int(numero)):
+    for i in range(1,int(cadena)):
         resultado.append(resultado[i] + resultado[i-1])
-    solucion = 'El numero ' + numero + ' en la sucesion fibonacci es :' + str(resultado[int(numero)])
-    return render_template('resultado.html',solucion=solucion)
+    solucion = 'El numero ' + cadena + ' en la sucesion fibonacci es :' + str(resultado[int(cadena)])
+    return render_template('resultado.html',solucion=solucion,visitado=visitado)
 
 # Pagina que indica si la cadena generada es valida
 @app.route('/cadena')
 def cadena():
+    ultimavisita('cadena','cadena','')
     tamano = random.randint(2,10)
     resultado = []
     for i in range(0,tamano):
@@ -114,16 +142,17 @@ def cadena():
     if valor != 0:
         valido = False
 
-        if valido == True:
-            solucion = 'La cadena generada es ' + str(resultado) + ' y es valida'
-        else:
-            solucion ='La cadena generada es ' + str(resultado) + ' y es invalida'
+    if valido == True:
+        solucion = 'La cadena generada es ' + str(resultado) + ' y es valida'
+    else:
+        solucion ='La cadena generada es ' + str(resultado) + ' y es invalida'
 
-    return render_template('resultado.html',solucion=solucion)
+    return render_template('resultado.html',solucion=solucion,visitado=visitado)
 
 # Pagina que indica si se ha indroducido un correo, un nombre, o una tarjeta valida
 @app.route('/validacion/<cadena>')
 def valido(cadena):
+    ultimavisita('validacion','valido',cadena)
     if re.search('.+@\w+\.\w+', cadena):
         solucion = 'La cadena introducida es un correo'
     elif re.search('\d{4}-|\s\d{4}-|\s\d{4}-|\s\d{4}', cadena):
@@ -133,4 +162,15 @@ def valido(cadena):
     else :
         solucion = f'la cadena introducida no corresponde a un correo,tarjeta valida o nombre'
 
-    return render_template('resultado.html',solucion=solucion)
+    return render_template('resultado.html',solucion=solucion,visitado=visitado)
+
+def ultimavisita(nombre,link,dato):
+    valor = ({"link":link,"dato":dato})
+    numero = len(visitado)
+    if numero < 3:
+        visitado.append({"nombre":nombre,"enlace":valor})
+    else :
+        visitado[2] = visitado[1]
+        visitado[1] = visitado[0]
+        visitado[0] = {"nombre":nombre,"enlace":valor}
+    return None

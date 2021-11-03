@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    
+    
+        
+        <form action="{{ url_for('entrar' )}} " method="post">
+            <h1>Inicio de Usuario :</h1>
+            <h3>Nombre :</h3>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduzca el nombre de usuario">
+            </div>
+            <h3>Contraseña :</h3>
+            <div class="mb-3">
+                <input type="password" class="form-control" id="pws" name="pws" placeholder="Introduzca la contraseña">
+            </div>
+            <div class="col-12">
+                <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Entrar"  />
+            </div>
+        </form>
+    
+    {% endblock %}

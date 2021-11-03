@@ -3,14 +3,17 @@
     {% block content %} 
     
     
-        Introuzca los datos para el ejercicio separados por comas:
-        <form action="{{ url_for('pedirdatos', ejercicio=ejercicio )}} " method="post">
+       
+        <form action="{{ url_for('pedirdatos', cadena=cadena )}} " method="post">
             <div class="mb-3">
-                <label for="datos" class="form-label">{{ejercicio}}</label>
+                <h2> Introuzca los datos para el ejercicio separados por comas :</h2>
+                <h1>
+                    <label for="datos" class="form-label">{{cadena}}</label>
+                </h1>
                 <input type="text" class="form-control" id="datos" name="datos" placeholder="Introduzca los numeros">
             </div>
             <div class="col-12">
-                    <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Registrar"  />
+                    <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Registrar"  />    
             </div>
         </form>
     
