@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+    {% block content %} 
+    
+    
+        Introuzca los datos para el ejercicio separados por comas:
+        <form action="{{ url_for('pedirdatos', ejercicio=ejercicio )}} " method="post">
+            <div class="mb-3">
+                <label for="datos" class="form-label">{{ejercicio}}</label>
+                <input type="text" class="form-control" id="datos" name="datos" placeholder="Introduzca los numeros">
+            </div>
+            <div class="col-12">
+                    <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Registrar"  />
+            </div>
+        </form>
+    
+    {% endblock %}
+ 
