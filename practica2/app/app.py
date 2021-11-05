@@ -8,6 +8,7 @@ import re
 import model
 
 app = Flask(__name__)
+app.secret_key = "vjepmewawfew"
 
 # Pagina Principal
 @app.route('/')
@@ -15,7 +16,7 @@ def index():
     nombre = request.cookies.get('nombre')
     
     
-    return (render_template('index.html',nombre=nombre))
+    return historial(render_template('index.html',nombre=nombre))
 
 # Pagina de error de enlace
 @app.errorhandler(404)
@@ -43,23 +44,23 @@ def entrar():
         
         if pws == model.leerbd(nombre):
             solucion = 'Bienvenido : ' + str(nombre)
-            resp = make_response(render_template('index.html',solucion=solucion,nombre=nombre))
-            resp.set_cookie('nombre',nombre)
-            return resp
+            
+            
+            return historial(render_template('index.html',solucion=solucion,nombre=nombre),nombre)
         else: 
             if model.exiteuser(nombre):
                 solucion = 'La contraseña es incorrecta'
-                return render_template('entrar.html',solucion=solucion)
+                return historial( render_template('entrar.html',solucion=solucion))
             else:
                 solucion = 'El usuario no existe'
-                return render_template('entrar.html',solucion=solucion)
+                return historial(render_template('entrar.html',solucion=solucion))
             
     else:
         if nombre == None:
-            return render_template('entrar.html')
+            return historial(render_template('entrar.html'),'')
         else:
             solucion = 'El usuario ya esta logueado '
-            return render_template('index.html',solucion=solucion,nombre=nombre)
+            return historial(render_template('index.html',solucion=solucion,nombre=nombre))
 
 @app.route('/registrar' , methods=['GET', 'POST'] )
 def registrar():
@@ -96,21 +97,21 @@ def modificar():
         
         if nombre != nombrenuevo and model.exiteuser(nombrenuevo):
             solucion = 'El usuario ya existe, Introduce otro nombre de Usuario : '
-            return render_template('modificar.html',solucion=solucion)
+            return historial(render_template('modificar.html',solucion=solucion))
         else:
             if model.modificar(nombre,nombrenuevo,psw):
                 nombre = nombrenuevo
                 solucion = ' Se han modificado los datos del usuario : ' + str(nombre)
-                resp = make_response(render_template('index.html',solucion=solucion,nombre=nombre))
-                resp.set_cookie('nombre',nombre)
-                return resp
+                #resp = make_response(render_template('index.html',solucion=solucion,nombre=nombre))
+                #resp.set_cookie('nombre',nombre)
+                return historial(render_template('index.html',solucion=solucion,nombre=nombre),nombre)
     else:
         if nombre == None:
             solucion = 'No ha iniciado Sesion'
-            return render_template('modificar.html',solucion=solucion)
+            return historial(render_template('modificar.html',solucion=solucion))
         else :
             solucion = 'Modifique el Usuario '
-            return render_template('modificar.html',solucion=solucion,nombre=nombre,psw=password)
+            return historial(render_template('modificar.html',solucion=solucion,nombre=nombre,psw=password),nombre)
 
 @app.route('/pedirdatos/<cadena>' , methods=['GET', 'POST'] )
 def pedirdatos(cadena):
@@ -236,40 +237,33 @@ def valido(cadena):
 
     return render_template('index.html',solucion=solucion,nombre=nombre)
 
-#def ultimavisita(nombre,link,dato):
-#    if link == 'index':
-#        resp = make_response(index())
-#    elif link == 'gato':
-#        resp = make_response(gato())
-#    elif link == 'entrar':
-#        resp = make_response(entrar())
-#    elif link == 'registrar':
-#        resp = make_response(registrar())
-#    elif link == 'pedirdatos':
-#        resp = make_response(pedirdatos())
-#    elif link == 'sgv':
-#        resp = make_response(sgv())
-#    elif link == 'burbuja':
-#        resp = make_response(burbuja(dato))
-#    resp.set_cookie('nombre', expires=0)
-
-#    valor = ({"link":link,"dato":dato})
-#    numero = len(visitado)
-#    if numero < 3:
-#        visitado.append({"nombre":nombre,"enlace":valor})
-#    else :
-#        visitado[2] = visitado[1]
-#        visitado[1] = visitado[0]
-#        visitado[0] = {"nombre":nombre,"enlace":valor}
-#    return None
-
 @app.route('/salir')
 def salir():
     resp = make_response(render_template('index.html'))
     resp.set_cookie('nombre', expires=0)
     return resp
 
-def funcion(hola,visitado):
-    resp = make_response(render_template(hola))
-    resp.set_cookie('visitado1',hola)
+def historial(respuesta,user=None,visitado=None,datos=None):
+    resp = make_response(respuesta)
+    if user != None:
+        resp.set_cookie('nombre',user)
+    if visitado != None:
+        clave = {"nombre":visitado[0],"link":visitado[1],"dato":datos}
+    
+    cookie = []
+    cookie.append(request.cookies.get('visitado0'))
+    cookie.append(request.cookies.get('visitado1'))
+    cookie.append(request.cookies.get('visitado2'))
+    
+    if len(cookie) == 0:
+        resp.set_cookie('visitado0',clave)
+    elif len(cookie) == 1:
+        resp.set_cookie('visitado1',clave)
+    elif len(cookie) == 2:
+        resp.set_cookie('visitado2',clave)
+    elif len(cookie) == 3:
+        resp.set_cookie('visitado2', cookie[1])
+        resp.set_cookie('visitado1', cookie[0])
+        resp.set_cookie('visitado0', clave)
     return resp
+
