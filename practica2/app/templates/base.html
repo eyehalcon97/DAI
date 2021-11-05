@@ -2,6 +2,7 @@
   <html lang="es">
   <head>
     <title>Mi Pagina Web</title>
+    <link rel="shortcut icon" href="/static/images/icono.png">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -11,6 +12,7 @@
     
     <nav class="navbar navbar-expand-lg navbar-light bg-light ">
         <div class="container-fluid">
+          <img src = "/static/images/icono.png"width="80" height="80" alt="Gato" />
           <a class="navbar-brand" href="{{ url_for('index') }}">MiPaginaWeb</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,6 +42,9 @@
             {% if nombre %}
             <form class="d-flex" action="{{ url_for('salir')}}">
               <button class="btn btn-primary" type="submit">Salir</button>
+            </form>
+            <form class="d-flex" action="{{ url_for('modificar')}}">
+              <button class="btn btn-primary" type="submit">Modificar</button>
             </form>
             {% else %}
             <form class="d-flex" action="{{ url_for('entrar')}}">
@@ -74,14 +79,8 @@
   <aside>
     <h2>Ultimos enlaces accedidos :</h2>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
-    {% for link in visitado %}
-      
-      <li class="nav-item">
-        <h3><a class="nav-link active" aria-current="page" href="{{ url_for(link.enlace.link, cadena=link.enlace.dato ) }}">{{link.nombre}} {{link.enlace.dato}}</a> </h3>
-      </li>
-      
+      <h1>{{visitado}}</h1>
 
-    {% endfor %}
     </ul>
   </aside>
   

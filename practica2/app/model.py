@@ -4,10 +4,10 @@ from pickleshare import *
 
 db = PickleShareDB('miBD')
 
-def escribirbd(nombre,psw):
+def nuevousuario(nombre,psw):
     
     db[nombre] = {'psw':psw}
-    return db[nombre]
+    return True
 
 def leerbd(nombre):
     return db[nombre]['psw']
@@ -17,3 +17,9 @@ def exiteuser(nombre):
         return True
     else:
         return False
+
+def modificar(nombre,nombrenuevo,psw):
+    db[nombrenuevo] = db[nombre]
+    del db[nombre]
+    db[nombrenuevo] = {'psw':psw}
+    return True
