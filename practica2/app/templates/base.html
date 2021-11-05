@@ -72,12 +72,12 @@
 
   </body>
   <aside>
-    <h1>Ultimos enlaces accedidos :</h1>
+    <h2>Ultimos enlaces accedidos :</h2>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
     {% for link in visitado %}
       
       <li class="nav-item">
-        <h1><a class="nav-link active" aria-current="page" href="{{ url_for(link.enlace.link, cadena=link.enlace.dato ) }}">{{link.nombre}} {{link.enlace.dato}}</a> </h1>
+        <h3><a class="nav-link active" aria-current="page" href="{{ url_for(link.enlace.link, cadena=link.enlace.dato ) }}">{{link.nombre}} {{link.enlace.dato}}</a> </h3>
       </li>
       
 
