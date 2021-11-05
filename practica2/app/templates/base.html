@@ -79,8 +79,9 @@
   <aside>
     <h2>Ultimos enlaces accedidos :</h2>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
-      <h1>{{visitado}}</h1>
-
+      {% for i in visitado %}
+      <h1>{{i.nombre}}</h1>
+      {% endfor %}
     </ul>
   </aside>
   

@@ -14,9 +14,11 @@ app.secret_key = "vjepmewawfew"
 @app.route('/')
 def index():
     nombre = request.cookies.get('nombre')
+    pagina = 'Home'
+    link = '/'
+    visitado = leerhistorial()
     
-    
-    return historial(render_template('index.html',nombre=nombre))
+    return enviarcookie(render_template('index.html',nombre=nombre,visitado=visitado),None,pagina,link)
 
 # Pagina de error de enlace
 @app.errorhandler(404)
@@ -46,21 +48,21 @@ def entrar():
             solucion = 'Bienvenido : ' + str(nombre)
             
             
-            return historial(render_template('index.html',solucion=solucion,nombre=nombre),nombre)
+            return enviarcookie(render_template('index.html',solucion=solucion,nombre=nombre),nombre)
         else: 
             if model.exiteuser(nombre):
                 solucion = 'La contraseña es incorrecta'
-                return historial( render_template('entrar.html',solucion=solucion))
+                return enviarcookie( render_template('entrar.html',solucion=solucion))
             else:
                 solucion = 'El usuario no existe'
-                return historial(render_template('entrar.html',solucion=solucion))
+                return enviarcookie(render_template('entrar.html',solucion=solucion))
             
     else:
         if nombre == None:
-            return historial(render_template('entrar.html'),'')
+            return enviarcookie(render_template('entrar.html'),'')
         else:
             solucion = 'El usuario ya esta logueado '
-            return historial(render_template('index.html',solucion=solucion,nombre=nombre))
+            return enviarcookie(render_template('index.html',solucion=solucion,nombre=nombre))
 
 @app.route('/registrar' , methods=['GET', 'POST'] )
 def registrar():
@@ -97,21 +99,21 @@ def modificar():
         
         if nombre != nombrenuevo and model.exiteuser(nombrenuevo):
             solucion = 'El usuario ya existe, Introduce otro nombre de Usuario : '
-            return historial(render_template('modificar.html',solucion=solucion))
+            return enviarcookie(render_template('modificar.html',solucion=solucion))
         else:
             if model.modificar(nombre,nombrenuevo,psw):
                 nombre = nombrenuevo
                 solucion = ' Se han modificado los datos del usuario : ' + str(nombre)
                 #resp = make_response(render_template('index.html',solucion=solucion,nombre=nombre))
                 #resp.set_cookie('nombre',nombre)
-                return historial(render_template('index.html',solucion=solucion,nombre=nombre),nombre)
+                return enviarcookie(render_template('index.html',solucion=solucion,nombre=nombre),nombre)
     else:
         if nombre == None:
             solucion = 'No ha iniciado Sesion'
-            return historial(render_template('modificar.html',solucion=solucion))
+            return enviarcookie(render_template('modificar.html',solucion=solucion))
         else :
             solucion = 'Modifique el Usuario '
-            return historial(render_template('modificar.html',solucion=solucion,nombre=nombre,psw=password),nombre)
+            return enviarcookie(render_template('modificar.html',solucion=solucion,nombre=nombre,psw=password),nombre)
 
 @app.route('/pedirdatos/<cadena>' , methods=['GET', 'POST'] )
 def pedirdatos(cadena):
@@ -243,25 +245,43 @@ def salir():
     resp.set_cookie('nombre', expires=0)
     return resp
 
-def historial(respuesta,user=None,visitado=None,datos=None):
+def enviarcookie(respuesta,user=None,nombrepag=None,link=None,datos=None):
     resp = make_response(respuesta)
     if user != None:
         resp.set_cookie('nombre',user)
-    if visitado != None:
-        clave = {"nombre":visitado[0],"link":visitado[1],"dato":datos}
-    cookie = []
-    cookie.append(request.cookies.get('visitado0'))
-    cookie.append(request.cookies.get('visitado1'))
-    cookie.append(request.cookies.get('visitado2'))
-
-    if len(cookie) == 0:
-        resp.set_cookie('visitado0',clave)
-    elif len(cookie) == 1:
-        resp.set_cookie('visitado1',clave)
-    elif len(cookie) == 2:
-        resp.set_cookie('visitado2',clave)
-    elif len(cookie) == 3:
-        resp.set_cookie('visitado2', request.cookies.get('visitado1'))
-        resp.set_cookie('visitado1', request.cookies.get('visitado0'))
-        resp.set_cookie('visitado0', clave)
+    if nombrepag != None and link != None:
+        clave = str(nombrepag) + ',' + str(link) + ',' + str(datos)
+        cookie0 = request.cookies.get('visitado0')
+        cookie1 = request.cookies.get('visitado1')
+        cookie2 = request.cookies.get('visitado2')
+        if cookie0 == None:
+            resp.set_cookie('visitado0',clave)
+        elif cookie1 == None:
+            resp.set_cookie('visitado1',clave)
+        elif cookie2 == None :
+            resp.set_cookie('visitado2',clave)
+        else :
+            resp.set_cookie('visitado2', cookie1)
+            resp.set_cookie('visitado1', cookie0)
+            resp.set_cookie('visitado0', clave)
     return resp
+
+def leerhistorial():
+    resp = []
+    cookie0 = request.cookies.get('visitado0')
+    cookie1 = request.cookies.get('visitado1')
+    cookie2 = request.cookies.get('visitado2')
+    if cookie0 != None:
+        cadena = cookie0.split(',')
+        cookie = {'nombre':cadena[0],'link':cadena[1],'dato':cadena[2]}
+        resp.append(cookie)
+        if cookie1 != None:
+            cadena = cookie1.split(',')
+            cookie = {'nombre':cadena[0],'link':cadena[1],'dato':cadena[2]}
+            resp.append(cookie)
+            if cookie2 != None:
+                cadena = cookie2.split(',')
+                cookie = {'nombre':cadena[0],'link':cadena[1],'dato':cadena[2]}
+                resp.append(cookie)
+    return resp
+
