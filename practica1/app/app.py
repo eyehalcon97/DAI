@@ -113,3 +113,7 @@ def valido(cadena):
         return f'La cadena introducida es un nombre'
 
     return f'la cadena introducida no corresponde a un correo,tarjeta valida o nombre'
+
+
+def salir():
+    return None

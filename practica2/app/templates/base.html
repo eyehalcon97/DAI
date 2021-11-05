@@ -37,13 +37,19 @@
                 </ul>
               </li>
             </ul>
-
+            {% if nombre %}
+            <form class="d-flex" action="{{ url_for('salir')}}">
+              <button class="btn btn-primary" type="submit">Salir</button>
+            </form>
+            {% else %}
             <form class="d-flex" action="{{ url_for('entrar')}}">
               <button class="btn btn-primary" type="submit">Entrar</button>
             </form>
             <form class="d-flex" action="{{ url_for('registrar')}}">
               <button class="btn btn-primary" type="submit">Registrar</button>
             </form>
+            {% endif %}
+
           </div>
         </div>
       </nav>
@@ -55,6 +61,7 @@
     <div class="position-relative">
 
       <div class="position-absolute top-0 start-50 translate-middle-x">
+        <h1>Usuario : {{nombre}}</h1>
         {% block content %}{% endblock %}
       </div>
 

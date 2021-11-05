@@ -3,9 +3,8 @@
 {% block content %} 
     
     
-        
+       <h1> {{solucion}} </h1>
         <form action="{{ url_for('registrar' )}} " method="post">
-            <h1>Registro de nuevo usuario :</h1>
             <h3>Nombre :</h3>
             <div class="mb-3">
                 <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduzca el nombre de usuario">
@@ -18,5 +17,6 @@
                 <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Registrar"  />
             </div>
         </form>
+
     
     {% endblock %}
