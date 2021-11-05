@@ -249,12 +249,11 @@ def historial(respuesta,user=None,visitado=None,datos=None):
         resp.set_cookie('nombre',user)
     if visitado != None:
         clave = {"nombre":visitado[0],"link":visitado[1],"dato":datos}
-    
     cookie = []
     cookie.append(request.cookies.get('visitado0'))
     cookie.append(request.cookies.get('visitado1'))
     cookie.append(request.cookies.get('visitado2'))
-    
+
     if len(cookie) == 0:
         resp.set_cookie('visitado0',clave)
     elif len(cookie) == 1:
@@ -262,8 +261,7 @@ def historial(respuesta,user=None,visitado=None,datos=None):
     elif len(cookie) == 2:
         resp.set_cookie('visitado2',clave)
     elif len(cookie) == 3:
-        resp.set_cookie('visitado2', cookie[1])
-        resp.set_cookie('visitado1', cookie[0])
+        resp.set_cookie('visitado2', request.cookies.get('visitado1'))
+        resp.set_cookie('visitado1', request.cookies.get('visitado0'))
         resp.set_cookie('visitado0', clave)
     return resp
-
