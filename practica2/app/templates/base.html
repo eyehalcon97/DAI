@@ -12,7 +12,7 @@
     
     <nav class="navbar navbar-expand-lg navbar-light bg-light ">
         <div class="container-fluid">
-          <img src = "/static/images/icono.png"width="80" height="80" alt="Gato" />
+          <img src = "/static/images/icono.png"width="80" height="80" alt="Mi pagina" id="usuario" />
           <a class="navbar-brand" href="{{ url_for('index') }}">MiPaginaWeb</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -31,26 +31,32 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menu de Ejercicios</a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="{{ url_for('pedirdatos' ,cadena='ordenacion') }}">Ejercicio2</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('pedirdatos' ,cadena='criba') }}">Ejercicio3</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('pedirdatos' ,cadena='fibonacci') }}">Ejercicio4</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('cadena') }}">Ejercicio5</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('pedirdatos',cadena='cadena') }}">Ejercicio6</a></li>
+                  <li><a id="ejercicio" class="dropdown-item" href="{{ url_for('pedirdatos' ,cadena='ordenacion') }}">Ejercicio2</a></li>
+                  <li><a id="ejercicio" class="dropdown-item" href="{{ url_for('pedirdatos' ,cadena='criba') }}">Ejercicio3</a></li>
+                  <li><a id="ejercicio" class="dropdown-item" href="{{ url_for('pedirdatos' ,cadena='fibonacci') }}">Ejercicio4</a></li>
+                  <li><a id="ejercicio" class="dropdown-item" href="{{ url_for('cadena') }}">Ejercicio5</a></li>
+                  <li><a id="ejercicio" class="dropdown-item" href="{{ url_for('pedirdatos',cadena='cadena') }}">Ejercicio6</a></li>
                 </ul>
               </li>
             </ul>
             {% if nombre %}
-            <form class="d-flex" action="{{ url_for('salir')}}">
+            <div id="usuario">
+              <h2>{{nombre}}</h2>
+            </div>
+            <form id="usuario" class="d-flex" action="{{ url_for('salir')}}">
               <button class="btn btn-primary" type="submit">Salir</button>
             </form>
-            <form class="d-flex" action="{{ url_for('modificar')}}">
+            <form id="usuario" class="d-flex" action="{{ url_for('modificar')}}">
               <button class="btn btn-primary" type="submit">Modificar</button>
             </form>
             {% else %}
-            <form class="d-flex" action="{{ url_for('entrar')}}">
+            <div id="usuario">
+            <h2>Sin Sesion:</h2>
+            </div>
+            <form id="usuario" class="d-flex" action="{{ url_for('entrar')}}">
               <button class="btn btn-primary" type="submit">Entrar</button>
             </form>
-            <form class="d-flex" action="{{ url_for('registrar')}}">
+            <form id="usuario" class="d-flex" action="{{ url_for('registrar')}}">
               <button class="btn btn-primary" type="submit">Registrar</button>
             </form>
             {% endif %}
@@ -63,26 +69,30 @@
   </head>
 
   <body>
-    <div class="position-relative">
 
-      <div class="position-absolute top-0 start-50 translate-middle-x">
-        <h1>Usuario : {{nombre}}</h1>
-        {% block content %}{% endblock %}
-      </div>
+<div class="row">
+  <div class="column middle" style="background-color:#bbb;">  {% block content %}{% endblock %}
+  </div>
+  <div class="column side" style="background-color:#ccc;"><h2>Ultimos enlaces accedidos :</h2>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
+      {% for i in visitado %}
+        {% if i.dato  %}
+          <a id="visita" class="navbar-brand" aria-current="page" href="{{ url_for(i.link,cadena = i.dato) }}"><h1>{{i.nombre}}</h1></a>
+         {% else %}
+            <a id="visita" class="navbar-brand" aria-current="page" href="{{ url_for(i.link) }}"><h1>{{i.nombre}}</h1></a>
+         {% endif %}
+      {% endfor %}
+    </ul></div>
+</div>
 
-    </div>
+<div class="footer">
+  <h1>Todos los derechos reservados</h1>
+</div>
 
-    
+
 
 
   </body>
-  <aside>
-    <h2>Ultimos enlaces accedidos :</h2>
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
-      {% for i in visitado %}
-      <h1>{{i.nombre}}</h1>
-      {% endfor %}
-    </ul>
-  </aside>
+  
   
 </html>
