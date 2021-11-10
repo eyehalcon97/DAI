@@ -133,25 +133,6 @@ def pedirdatos(cadena):
     else:    
         return enviarcookie(render_template('pedirdatos.html',cadena=cadena,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
 
-
-# Pagina con dibujos aleatorios
-@app.route('/sgv')
-def sgv():
-    nombre = request.cookies.get('nombre')
-    pagina = 'Pagina con SGV'
-    link = 'sgv'
-    visitado = leerhistorial()
-    colores= ['red','green','blue', 'yellow','black']
-    rectangulox = random.randint(0,500)
-    rectanguloy = random.randint(0,500)
-    recposx = random.randint(0,1000)
-    recposy = random.randint(0,600)
-    rectangulocol = random.choice(colores)
-    elipsex = random.randint(0,500)
-    elipsey = random.randint(0,500)
-    elipsecol = random.choice(colores)
-    return enviarcookie(render_template('sgv.html',recposx=recposx, recposy=recposy,rectangulox=rectangulox,rectanguloy=rectanguloy,rectangulocol=rectangulocol,elipsex=elipsex,elipsey=elipsey,elipsecol=elipsecol,nombre=nombre,visitado=visitado),None,pagina,link)
-
 # Pagina que ordena los numeros
 @app.route('/ordena/<cadena>')
 def burbuja(cadena):
