@@ -1,0 +1,14 @@
+
+{% extends "base.html" %}
+
+{% block content %} 
+    <svg width="{{recposx}}" height="{{recposy}}">
+        <rect width="100%" height="100%" fill="white" />
+    </svg>
+    <svg width="{{rectangulox}}" height="{{rectanguloy}}">
+        <rect width="100%" height="100%" fill="{{rectangulocol}}" />
+    </svg>
+    <svg width="{{elipsex}}" height="{{elipsex}}">
+        <ellipse cx="150" cy="120" rx="140" ry="80" fill="{{elipsecol}}"/>
+    </svg>
+{% endblock %}

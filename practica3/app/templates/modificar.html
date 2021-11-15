@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    
+    
+       <h1> {{solucion}} </h1>
+        <form action="{{ url_for('modificar' )}} " method="post">
+            <h3>Nombre :</h3>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduzca el nuevo nombre de usuario" value="{{nombre}}">
+            </div>
+            <h3>Contraseña :</h3>
+            <div class="mb-3">
+                <input type="password" class="form-control" id="pws" name="pws" placeholder="Introduzca la contraseña" value = "{{psw}}">
+            </div>
+            <div class="col-12">
+                <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Modificar"  />
+            </div>
+        </form>
+
+    
+    {% endblock %}
