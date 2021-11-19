@@ -2,6 +2,7 @@
 
 from flask import Flask , session ,request , render_template
 from flask import make_response
+from pymongo import MongoClient
 
 import random
 import re
@@ -295,3 +296,22 @@ def leerhistorial():
                 resp.append(cookie)
     return resp
 
+client = MongoClient("mongo", 27017) # Conectar al servicio (docker) "mongo" en su puerto estandar
+db = client.SampleCollections        # Elegimos la base de datos de ejemplo
+
+...
+
+@app.route('/mongo')
+def mongo():
+	# Encontramos los documentos de la coleccion "samples_friends"
+	episodios = db.samples_friends.find() # devuelve un cursor(*), no una lista ni un iterador
+
+	lista_episodios = []
+	for episodio in episodios:
+		app.logger.debug(episodio) # salida consola
+       
+		lista_episodios.append(episodio)
+
+	# a los templates de Jinja hay que pasarle una lista, no el cursor
+	return render_template('index.html', capitulos=lista_episodios)
+	

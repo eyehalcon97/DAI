@@ -1,7 +1,24 @@
 {% extends "base.html" %}
 
     {% block content %} 
+      {% if solucion %} 
       <h1> {{ solucion }}  </h1>
-    
+      {%endif%}
+
+
+      {% if capitulos %}
+      {% for i in capitulos %}
+      <div>
+        <h1>Temporada{{i.season}} Capitulo: {{i.number}}</h1>
+        <h1>{{i.name}}</h1>
+        <h1>Fecha de emision: {{i.airdate}}</h1>
+        <h1>Duracion: {{i.runtime}} min</h1>
+        <h1>Sinopsis: </h1>
+        {{i.summary}}
+        <img src={{i.image.medium}} alt="">
+      </div>
+      
+      {% endfor %}
+      {%endif%}
     {% endblock %}
  
