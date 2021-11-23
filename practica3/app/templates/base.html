@@ -35,6 +35,12 @@
                   <li><a id="ejercicio" class="dropdown-item" href="{{ url_for('pedirdatos',cadena='cadena') }}">Ejercicio6</a></li>
                 </ul>
               </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('friends',cadena=0) }}">Capitulos Friends</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('pokedex',cadena=0) }}">Pokedex</a>
+              </li>
             </ul>
             {% if nombre %}
             <div id="usuario">
@@ -68,28 +74,44 @@
   <body>
 
 <div class="row">
-  <div class="column middle" >  {% block content %}{% endblock %}
+  <div class="col-9" >  
+    <div class="contenido">
+      {% block content %}{% endblock %}
+    </div>
+   
   </div>
-  <div class="column side" ><h2>Ultimos enlaces accedidos :</h2>
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
-      {% for i in visitado %}
-        {% if i.dato  %}
-          <a id="visita" class="navbar-brand" aria-current="page" href="{{ url_for(i.link,cadena = i.dato) }}"><h1>{{i.nombre}}</h1></a>
-         {% else %}
-            <a id="visita" class="navbar-brand" aria-current="page" href="{{ url_for(i.link) }}"><h1>{{i.nombre}}</h1></a>
-         {% endif %}
-      {% endfor %}
-    </ul></div>
-</div>
 
-<div class="footer">
-  <h1>Todos los derechos reservados</h1>
+  <aside class="col-3" >
+      <div class="aside">
+        <h2>Ultimos enlaces accedidos :</h2>
+        {% for i in visitado %}
+        <div class="row">
+          {% if i.dato  %}
+            <a id="visita" class="navbar-brand" aria-current="page" href="{{ url_for(i.link,cadena = i.dato) }}"><h1>{{i.nombre}}</h1></a>
+           {% else %}
+              <a id="visita" class="navbar-brand" aria-current="page" href="{{ url_for(i.link) }}"><h1>{{i.nombre}}</h1></a>
+           {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    
+    
+  </aside>
+  
 </div>
+<footer>
+  <div class="row">
+    <div class="footer">
+      <h1>Todos los derechos reservados</h1>
+    </div>
+    
+  </div>
+</footer>
 
 
 
 
   </body>
-  
+
   
 </html>

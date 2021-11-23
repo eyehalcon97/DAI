@@ -2,7 +2,7 @@
 
 from flask import Flask , session ,request , render_template
 from flask import make_response
-from pymongo import MongoClient
+
 
 import random
 import re
@@ -234,12 +234,122 @@ def valido(cadena):
 
     return enviarcookie(render_template('index.html',solucion=solucion,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
 
+
+
+
+@app.route('/friends/<cadena>' , methods=['GET', 'POST'])
+def friends(cadena):
+
+    if request.method == 'POST':
+        datos = request.form['nombre']
+        return busquedafriends(datos)
+
+    numero = int(cadena)*6
+    capitulos = model.BDfri(numero,numero+6)
+    nombre = request.cookies.get('nombre')
+    pagina = 'Capitulos de Friends Pagina ' + str(cadena)
+    link = 'friends'
+    visitado = leerhistorial()
+    siguiente = int(cadena)+1
+    atras = -1
+    paginas = []
+    tamanio = model.lenfriends()
+    if(int(cadena) > 0):
+        atras = int(cadena)-1
+    if((int(cadena)+1)*6 > tamanio):
+        siguiente=0
+    j=0
+    for i in range(0,tamanio,6):
+        paginas.append(j)
+        j=j+1
+
+    return enviarcookie(render_template('index.html',capitulos=capitulos,nombre=nombre,paginado=int(cadena),paginas=paginas,siguiente=siguiente,atras=atras,visitado=visitado),None,pagina,link,cadena)
+
+
+
+
+
+@app.route('/busquedafriends/<cadena>')
+def busquedafriends(cadena):
+
+    capitulos = model.busquedafriends(cadena)
+    nombre = request.cookies.get('nombre')
+    pagina = 'Capitulos de Friends Pagina : ' + str(cadena)
+    link = 'busquedafriends'
+    visitado = leerhistorial()
+    atras = -1
+    siguiente= 0
+    solucion='Se han encontrado los siguientes elementos con : ' + str(cadena)
+    if len(capitulos) == 0:
+        solucion = "no se ha encontrado ningun resultado de : " + str(cadena)
+
+    return enviarcookie(render_template('index.html',capitulos=capitulos,solucio=solucion,atras=atras,siguiente=siguiente,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
+
+
+
+@app.route('/busquedapokedex/<cadena>')
+def busquedapokedex(cadena):
+
+    pokedex = model.busquedapokedex(cadena)
+    nombre = request.cookies.get('nombre')
+    pagina = 'Busqueda en pokedex de : ' + str(cadena)
+    link = 'busquedapokedex'
+    visitado = leerhistorial()
+    atras = -1
+    siguiente= 0
+    solucion='Se han encontrado los siguientes elementos con : ' + str(cadena)
+    if len(pokedex) == 0:
+        solucion = "no se ha encontrado ningun resultado de : " + str(cadena)
+
+    return enviarcookie(render_template('index.html',pokedex=pokedex,solucion=solucion,atras=atras,siguiente=siguiente,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
+
+
+
+
+
+@app.route('/pokedex/<cadena>' , methods=['GET', 'POST'])
+def pokedex(cadena):
+
+    if request.method == 'POST':
+        
+        datos = request.form['nombre']
+        return busquedapokedex(datos)
+
+    numero = int(cadena)*4
+    pokedex = model.BDpoke(numero,numero+4)
+    nombre = request.cookies.get('nombre')
+    pagina = 'pokedex Pagina ' + str(cadena)
+    link = 'pokedex'
+    visitado = leerhistorial()
+    siguiente = int(cadena)+1
+    atras = -1
+    paginas = []
+    tamanio = model.lenpokedex()
+    if(int(cadena) > 0):
+        atras = int(cadena)-1
+    if((int(cadena)+1)*4 > tamanio):
+        siguiente=0
+    j=0
+    for i in range(0,tamanio,4):
+        paginas.append(j)
+        j=j+1
+
+    return enviarcookie(render_template('index.html',pokedex=pokedex,nombre=nombre,paginado=int(cadena),paginas=paginas,siguiente=siguiente,atras=atras,visitado=visitado),None,pagina,link,cadena)
+
+	
+
 @app.route('/salir')
 def salir():
     visitado = leerhistorial()
     solucion = 'Se ha salido de la sesion'
     
     return enviarcookie(render_template('index.html',solucion=solucion,visitado=visitado),0)
+
+
+
+
+
+
 
 def enviarcookie(respuesta,user=None,nombrepag=None,link=None,datos=None):
     resp = make_response(respuesta)
@@ -295,23 +405,3 @@ def leerhistorial():
                     cookie = {'nombre':cadena[0],'link':cadena[1]}
                 resp.append(cookie)
     return resp
-
-client = MongoClient("mongo", 27017) # Conectar al servicio (docker) "mongo" en su puerto estandar
-db = client.SampleCollections        # Elegimos la base de datos de ejemplo
-
-...
-
-@app.route('/mongo')
-def mongo():
-	# Encontramos los documentos de la coleccion "samples_friends"
-	episodios = db.samples_friends.find() # devuelve un cursor(*), no una lista ni un iterador
-
-	lista_episodios = []
-	for episodio in episodios:
-		app.logger.debug(episodio) # salida consola
-       
-		lista_episodios.append(episodio)
-
-	# a los templates de Jinja hay que pasarle una lista, no el cursor
-	return render_template('index.html', capitulos=lista_episodios)
-	

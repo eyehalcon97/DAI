@@ -5,20 +5,126 @@
       <h1> {{ solucion }}  </h1>
       {%endif%}
 
-
       {% if capitulos %}
+
+     
+        <form action="{{ url_for('friends', cadena='busqueda' )}} " method="post">
+            <h1>Buscar :</h1>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduzca el nombre de usuario" required>
+            </div>
+            <div class="col-12">
+                <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Buscar"  />
+            </div>
+        </form>
+
       {% for i in capitulos %}
-      <div>
+      <div class="friends" onclick="window.open('{{i.url}}', );"style="cursor: pointer;">&nbsp;
         <h1>Temporada{{i.season}} Capitulo: {{i.number}}</h1>
         <h1>{{i.name}}</h1>
         <h1>Fecha de emision: {{i.airdate}}</h1>
         <h1>Duracion: {{i.runtime}} min</h1>
-        <h1>Sinopsis: </h1>
-        {{i.summary}}
+        <h1>Sinopsis: {{i.summary}}</h1>
         <img src={{i.image.medium}} alt="">
       </div>
       
       {% endfor %}
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          {%if atras != -1%}
+          <li class="page-item active"><a class="page-link" href="{{ url_for('friends',cadena=atras ) }}">Pagina Anterior</a></li>
+          {% endif %}
+
+          {% for i in paginas %}
+
+          {%if i == paginado%}
+          <li class="page-item active"><a class="page-link" href="{{ url_for('friends',cadena=i ) }}">{{i}}</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('friends',cadena=i ) }}">{{i}}</a></li>
+          {% endif %}
+
+          {% endfor %}
+
+          {%if siguiente != 0%}
+          <li class="page-item active"><a class="page-link" href="{{ url_for('friends',cadena=siguiente ) }}">Siguiente Pagina</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+
+
       {%endif%}
+
+      {% if pokedex %}
+
+
+      <form action="{{ url_for('pokedex', cadena='busqueda' )}} " method="post">
+        <h1>Buscar :</h1>
+        <div class="mb-3">
+            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduzca el nombre de usuario" required>
+        </div>
+        <div class="col-12">
+            <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Buscar"  />
+        </div>
+    </form>
+
+      {% for pokemon in pokedex %}
+            <div class="pokemon">
+            <h1>Nº : {{pokemon.num}}</h1>
+            <img src={{pokemon.img}}>
+            <h1>{{pokemon.name}}</h1>
+            <h1>
+            Tipo :
+            {% for i in pokemon.type %}
+                {{i}}
+              {% endfor %}
+            </h1>
+            <h1>Altura : {{pokemon.height}}</h1>
+            <h1>Peso : {{pokemon.weight}}</h1>
+            <h1>Debilidad :
+              {% for i in pokemon.weaknesses %}
+                {{i}}
+              {% endfor %}
+    
+    
+            </h1>
+        
+
+
+      </div>
+      
+      {% endfor %}
+      <div>
+
+
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            {%if atras != -1%}
+            <li class="page-item active"><a class="page-link" href="{{ url_for('pokedex',cadena=atras ) }}">Pagina Anterior</a></li>
+            {% endif %}
+  
+            {% for i in paginas %}
+  
+            {%if i == paginado%}
+            <li class="page-item active"><a class="page-link" href="{{ url_for('pokedex',cadena=i ) }}">{{i}}</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('pokedex',cadena=i ) }}">{{i}}</a></li>
+            {% endif %}
+  
+            {% endfor %}
+  
+            {%if siguiente != 0%}
+            <li class="page-item active"><a class="page-link" href="{{ url_for('pokedex',cadena=siguiente ) }}">Siguiente Pagina</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+
+      </div>
+      
+
+
+      {%endif%}
+
+
     {% endblock %}
  

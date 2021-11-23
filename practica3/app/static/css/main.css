@@ -1,69 +1,58 @@
 
-#usuario{
-    margin-right: 1%;
-     
-}
-
-
-#navbarSupportedContent{
-    font-size: medium;
-    margin-bottom: 1%;
-}
-#ejercicio{
-    font-size: medium;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (max-width: 600px) {
-    .row {
-      -webkit-flex-direction: column;
-      flex-direction: column;
-    }
-  }
-
-/* Container for flexboxes */
-.row {
-    display: -webkit-flex;
-    display: flex;
-    margin-left: 10%;
-  }
-.row img{
-    width: 20%;
-    height: auto;
-}
+.contenido{
   
-  /* Create three unequal columns that sits next to each other */
-  .column {
-    padding: 10px;
-    height: 300px; /* Should be removed. Only for demonstration */
-  }
+  text-align: center;
+  align-content: center;
+  padding-top: 5%;
+  padding-right: 5%;
+  padding-left: 5%;
+  padding-bottom: 5%;
+  margin-bottom: 5%;
   
-  /* Left and right column */
-  .column.side {
-     -webkit-flex: 1;
-     -ms-flex: 1;
-     flex: 1;
-     background-color: #17f1f1;
-     margin-right: 5%;
-     margin-bottom: 10%;
-  }
+}
+
+.footer{
+  text-align: center;
+  background-color: rgb(236, 236, 236);
+}
+
+.aside{
   
-  /* Middle column */
-  .column.middle {
-    background-color: #ffffff;
-    -webkit-flex: 2;
-    -ms-flex: 2;
-    flex: 2;
-    margin-right: 5%;
-    margin-bottom: 10%;
-  }
+  text-align: center;
+  background-color: aqua;
+  border-radius: 20%;
+  margin-right: 5%;
+  margin-left: 5%;
+}
+
+.pokemon{
+  max-width: 40%;
+  margin-right: 30%;
+  margin-left: 30%;
+  padding-bottom: 5%;
+  margin-bottom: 2%;
+  margin-top: 2%;
+  background-color: rgb(252, 194, 86);
+  border-color: orangered;
+  border-radius: 20%;
   
-  /* Style the footer */
-  .footer {
-    background-color: #ffffff;
-    padding: 10px;
-    text-align: center;
-  }
+}
+.pokemon img{
+  background-color: rgb(122, 251, 255);
+  border-radius: 20%;
+}
+
+.friends{
+  text-align: left;
+  max-width: 100%;
+  margin-right: 10%;
+  margin-left: 10%;
+  padding-bottom: 1%;
+  margin-bottom: 2%;
+  background-color: rgb(30, 189, 238);
+  margin-top: 2%;
+}
+
+.firends img{
+  border-radius: 20%;
+}
