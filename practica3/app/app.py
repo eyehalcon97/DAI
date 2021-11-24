@@ -1,7 +1,7 @@
 #./app/app.py
 
 from flask import Flask , session ,request , render_template
-from flask import make_response
+from flask import make_response , redirect , url_for
 
 
 import random
@@ -240,101 +240,106 @@ def valido(cadena):
 @app.route('/friends/<cadena>' , methods=['GET', 'POST'])
 def friends(cadena):
 
-    if request.method == 'POST':
-        datos = request.form['nombre']
-        return busquedafriends(datos)
+    cadenasplit = cadena.split('.')
 
-    numero = int(cadena)*6
-    capitulos = model.BDfri(numero,numero+6)
+    if request.method == 'POST':
+        if request.form['nombre'] != cadenasplit[0]:
+            datos = request.form['nombre']
+            datos = datos + '.' + 'busqueda' + '.' + '0'
+            return redirect(url_for('friends', cadena = datos))
+    
     nombre = request.cookies.get('nombre')
-    pagina = 'Capitulos de Friends Pagina ' + str(cadena)
     link = 'friends'
+    numero = int(cadenasplit[2])
     visitado = leerhistorial()
-    siguiente = int(cadena)+1
+    if cadenasplit[1] == 'busqueda':
+        capitulos = model.busquedafriends(cadenasplit[0])
+        pagina = 'Friends Busqueda : ' + cadenasplit[0] + ' Pagina :' + str(numero)
+        if(len(capitulos) == 0):
+            solucion = 'No se ha encontrado nada con el argumento : ' + cadenasplit[0]
+            pagina = 'Friends Busqueda : ' + cadenasplit[0]
+        else:
+            solucion = 'Se ha encontrado los siguientes elementos con el argumento : ' + cadenasplit[0]
+    else:
+        capitulos = model.BDfriends()
+        pagina = 'Capitulos de Friends Pagina : ' + str(numero)
+        solucion=''
+        
+
+    
+    siguiente =  cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(numero+1)
     atras = -1
     paginas = []
-    tamanio = model.lenfriends()
-    if(int(cadena) > 0):
-        atras = int(cadena)-1
-    if((int(cadena)+1)*6 > tamanio):
+    tamanio = len(capitulos)
+    if(numero > 0):
+        atras = cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(numero-1)
+    if((numero+1)*6 >= tamanio):
         siguiente=0
     j=0
     for i in range(0,tamanio,6):
-        paginas.append(j)
+        paginas.append( {'valor' : cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(j) ,'numero' : j})
         j=j+1
-
-    return enviarcookie(render_template('index.html',capitulos=capitulos,nombre=nombre,paginado=int(cadena),paginas=paginas,siguiente=siguiente,atras=atras,visitado=visitado),None,pagina,link,cadena)
-
-
-
-
-
-@app.route('/busquedafriends/<cadena>')
-def busquedafriends(cadena):
-
-    capitulos = model.busquedafriends(cadena)
-    nombre = request.cookies.get('nombre')
-    pagina = 'Capitulos de Friends Pagina : ' + str(cadena)
-    link = 'busquedafriends'
-    visitado = leerhistorial()
-    atras = -1
-    siguiente= 0
-    solucion='Se han encontrado los siguientes elementos con : ' + str(cadena)
-    if len(capitulos) == 0:
-        solucion = "no se ha encontrado ningun resultado de : " + str(cadena)
-
-    return enviarcookie(render_template('index.html',capitulos=capitulos,solucio=solucion,atras=atras,siguiente=siguiente,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
-
-
-
-@app.route('/busquedapokedex/<cadena>')
-def busquedapokedex(cadena):
-
-    pokedex = model.busquedapokedex(cadena)
-    nombre = request.cookies.get('nombre')
-    pagina = 'Busqueda en pokedex de : ' + str(cadena)
-    link = 'busquedapokedex'
-    visitado = leerhistorial()
-    atras = -1
-    siguiente= 0
-    solucion='Se han encontrado los siguientes elementos con : ' + str(cadena)
-    if len(pokedex) == 0:
-        solucion = "no se ha encontrado ningun resultado de : " + str(cadena)
-
-    return enviarcookie(render_template('index.html',pokedex=pokedex,solucion=solucion,atras=atras,siguiente=siguiente,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
-
-
+    
+    capitulos = capitulos[numero*6:numero*6+6]
+    paginado = numero
+    friends=1
+    return enviarcookie(render_template('index.html',capitulos=capitulos,friends=friends,nombre=nombre,paginado=paginado,solucion=solucion,paginas=paginas,siguiente=siguiente,atras=atras,visitado=visitado),None,pagina,link,cadena)
 
 
 
 @app.route('/pokedex/<cadena>' , methods=['GET', 'POST'])
 def pokedex(cadena):
 
-    if request.method == 'POST':
-        
-        datos = request.form['nombre']
-        return busquedapokedex(datos)
+    cadenasplit = cadena.split('.')
 
-    numero = int(cadena)*4
-    pokedex = model.BDpoke(numero,numero+4)
+    if request.method == 'POST':
+        if request.form['nombre'] != cadenasplit[0]:
+            datos = request.form['nombre']
+            datos = datos + '.' + 'busqueda' + '.' + '0'
+            return redirect(url_for('pokedex', cadena = datos))
+    
     nombre = request.cookies.get('nombre')
-    pagina = 'pokedex Pagina ' + str(cadena)
     link = 'pokedex'
+    numero = int(cadenasplit[2])
     visitado = leerhistorial()
-    siguiente = int(cadena)+1
+    if cadenasplit[1] == 'busqueda':
+        pokedex = model.busquedapokedex(cadenasplit[0])
+        pagina = 'pokedex Busqueda : ' + cadenasplit[0] + ' Pagina : ' + str(numero)
+        if(len(pokedex) == 0):
+            solucion = 'No se ha encontrado nada con el argumento : ' + cadenasplit[0]
+            pagina = 'pokedex Busqueda : ' + cadenasplit[0]
+
+        else:
+            solucion = 'Se ha encontrado los siguientes elementos con el argumento : ' + cadenasplit[0]
+        
+    else:
+        
+        pokedex = model.BDpokedex()
+        pagina = 'pokedex Pagina : ' + str(numero)
+        solucion=''
+    
+    siguiente =  cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(numero+1)
     atras = -1
     paginas = []
-    tamanio = model.lenpokedex()
-    if(int(cadena) > 0):
-        atras = int(cadena)-1
-    if((int(cadena)+1)*4 > tamanio):
+    tamanio = len(pokedex)
+    if(numero > 0):
+        atras = cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(numero-1)
+    if((numero+1)*6 >= tamanio):
         siguiente=0
     j=0
-    for i in range(0,tamanio,4):
-        paginas.append(j)
+    for i in range(0,tamanio,6):
+        paginas.append( {'valor' : cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(j) ,'numero' : j})
         j=j+1
+    
+    pokedex = pokedex[numero*6:numero*6+6]
+    paginado = numero
+    pokemon = 1
+    return enviarcookie(render_template('index.html',pokedex=pokedex,pokemon=pokemon,nombre=nombre,solucion=solucion,paginado=paginado,paginas=paginas,siguiente=siguiente,atras=atras,visitado=visitado),None,pagina,link,cadena)
 
-    return enviarcookie(render_template('index.html',pokedex=pokedex,nombre=nombre,paginado=int(cadena),paginas=paginas,siguiente=siguiente,atras=atras,visitado=visitado),None,pagina,link,cadena)
+
+
+
+
 
 	
 
@@ -360,9 +365,9 @@ def enviarcookie(respuesta,user=None,nombrepag=None,link=None,datos=None):
             resp.set_cookie('nombre',user)
     if nombrepag != None and link != None:
         if(datos != None):
-            clave = str(nombrepag) + '/' + str(link) + '/' + str(datos)
+            clave = str(nombrepag) + '+' + str(link) + '+' + str(datos)
         else:
-            clave = str(nombrepag) + '/' + str(link)
+            clave = str(nombrepag) + '+' + str(link)
         cookie0 = request.cookies.get('visitado0')
         cookie1 = request.cookies.get('visitado1')
         cookie2 = request.cookies.get('visitado2')
@@ -384,21 +389,21 @@ def leerhistorial():
     cookie1 = request.cookies.get('visitado1')
     cookie2 = request.cookies.get('visitado2')
     if cookie0 != None:
-        cadena = cookie0.split('/')
+        cadena = cookie0.split('+')
         if len(cadena) == 3:
             cookie = {'nombre':cadena[0],'link':cadena[1],'dato':cadena[2]}
         else:
             cookie = {'nombre':cadena[0],'link':cadena[1]}
         resp.append(cookie)
         if cookie1 != None:
-            cadena = cookie1.split('/')
+            cadena = cookie1.split('+')
             if len(cadena) == 3:
                 cookie = {'nombre':cadena[0],'link':cadena[1],'dato':cadena[2]}
             else:
                 cookie = {'nombre':cadena[0],'link':cadena[1]}
             resp.append(cookie)
             if cookie2 != None:
-                cadena = cookie2.split('/')
+                cadena = cookie2.split('+')
                 if len(cadena) == 3:
                     cookie = {'nombre':cadena[0],'link':cadena[1],'dato':cadena[2]}
                 else:
