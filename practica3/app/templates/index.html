@@ -8,7 +8,7 @@
       {% if friends %}
 
      
-        <form action="{{ url_for('friends', cadena='busqueda' )}} " method="post">
+        <form action="{{ url_for('busquedafriends' )}} " method="post">
             <h1>Buscar :</h1>
             <div class="mb-3">
                 <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduzca el nombre de usuario" required>
@@ -60,7 +60,7 @@
       {% if pokemon %}
 
 
-      <form action="{{ url_for('pokedex', cadena='busqueda' )}} " method="post">
+      <form action="{{ url_for('busquedapokedex')}} " method="post">
         <h1>Buscar :</h1>
         <div class="mb-3">
             <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduzca el nombre de usuario" required>

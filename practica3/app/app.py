@@ -235,19 +235,24 @@ def valido(cadena):
     return enviarcookie(render_template('index.html',solucion=solucion,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
 
 
+@app.route('/busquedafriends' , methods=[ 'POST'])
+def busquedafriends():
+
+    if request.method == 'POST':
+        
+        datos = request.form['nombre']
+        datos = datos + '.' + 'busqueda' + '.' + '0'
+        return redirect(url_for('friends', cadena = datos))
 
 
-@app.route('/friends/<cadena>' , methods=['GET', 'POST'])
+
+
+
+
+@app.route('/friends/<cadena>' , methods=['GET'])
 def friends(cadena):
 
     cadenasplit = cadena.split('.')
-
-    if request.method == 'POST':
-        if request.form['nombre'] != cadenasplit[0]:
-            datos = request.form['nombre']
-            datos = datos + '.' + 'busqueda' + '.' + '0'
-            return redirect(url_for('friends', cadena = datos))
-    
     nombre = request.cookies.get('nombre')
     link = 'friends'
     numero = int(cadenasplit[2])
@@ -285,18 +290,18 @@ def friends(cadena):
     friends=1
     return enviarcookie(render_template('index.html',capitulos=capitulos,friends=friends,nombre=nombre,paginado=paginado,solucion=solucion,paginas=paginas,siguiente=siguiente,atras=atras,visitado=visitado),None,pagina,link,cadena)
 
-
-
-@app.route('/pokedex/<cadena>' , methods=['GET', 'POST'])
-def pokedex(cadena):
-
-    cadenasplit = cadena.split('.')
-
+@app.route('/busquedapokedex' , methods=['POST'])
+def busquedapokedex():
     if request.method == 'POST':
-        if request.form['nombre'] != cadenasplit[0]:
             datos = request.form['nombre']
             datos = datos + '.' + 'busqueda' + '.' + '0'
             return redirect(url_for('pokedex', cadena = datos))
+
+
+@app.route('/pokedex/<cadena>' , methods=['GET'])
+def pokedex(cadena):
+
+    cadenasplit = cadena.split('.')
     
     nombre = request.cookies.get('nombre')
     link = 'pokedex'
