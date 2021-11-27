@@ -1,7 +1,8 @@
 #./app/app.py
 
-from flask import Flask , session ,request , render_template
+from flask import Flask , session ,request , render_template , jsonify
 from flask import make_response , redirect , url_for
+from flask_restful import reqparse, abort, Api, Resource
 
 
 import random
@@ -9,6 +10,7 @@ import re
 import model
 
 app = Flask(__name__)
+api = Api(app)
 app.secret_key = "vjepmewawfew"
 
 # Pagina Principal
@@ -235,61 +237,6 @@ def valido(cadena):
     return enviarcookie(render_template('index.html',solucion=solucion,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
 
 
-@app.route('/busquedafriends' , methods=[ 'POST'])
-def busquedafriends():
-
-    if request.method == 'POST':
-        
-        datos = request.form['nombre']
-        datos = datos + '.' + 'busqueda' + '.' + '0'
-        return redirect(url_for('friends', cadena = datos))
-
-
-
-
-
-
-@app.route('/friends/<cadena>' , methods=['GET'])
-def friends(cadena):
-
-    cadenasplit = cadena.split('.')
-    nombre = request.cookies.get('nombre')
-    link = 'friends'
-    numero = int(cadenasplit[2])
-    visitado = leerhistorial()
-    if cadenasplit[1] == 'busqueda':
-        capitulos = model.busquedafriends(cadenasplit[0])
-        pagina = 'Friends Busqueda : ' + cadenasplit[0] + ' Pagina :' + str(numero)
-        if(len(capitulos) == 0):
-            solucion = 'No se ha encontrado nada con el argumento : ' + cadenasplit[0]
-            pagina = 'Friends Busqueda : ' + cadenasplit[0]
-        else:
-            solucion = 'Se ha encontrado los siguientes elementos con el argumento : ' + cadenasplit[0]
-    else:
-        capitulos = model.BDfriends()
-        pagina = 'Capitulos de Friends Pagina : ' + str(numero)
-        solucion=''
-        
-
-    
-    siguiente =  cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(numero+1)
-    atras = -1
-    paginas = []
-    tamanio = len(capitulos)
-    if(numero > 0):
-        atras = cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(numero-1)
-    if((numero+1)*6 >= tamanio):
-        siguiente=0
-    j=0
-    for i in range(0,tamanio,6):
-        paginas.append( {'valor' : cadenasplit[0] + '.' + cadenasplit[1] + '.' + str(j) ,'numero' : j})
-        j=j+1
-    
-    capitulos = capitulos[numero*6:numero*6+6]
-    paginado = numero
-    friends=1
-    return enviarcookie(render_template('index.html',capitulos=capitulos,friends=friends,nombre=nombre,paginado=paginado,solucion=solucion,paginas=paginas,siguiente=siguiente,atras=atras,visitado=visitado),None,pagina,link,cadena)
-
 @app.route('/busquedapokedex' , methods=['POST'])
 def busquedapokedex():
     if request.method == 'POST':
@@ -298,7 +245,17 @@ def busquedapokedex():
             return redirect(url_for('pokedex', cadena = datos))
 
 
-@app.route('/pokedex/<cadena>' , methods=['GET'])
+
+
+@app.route('/eliminarpokemon', methods=['DELETE'])
+def eliminarpokemon():
+    datos = request.form['nombre']
+    model.eliminarpokemon(datos)
+    return redirect(url_for('pokedex', '..0'))
+    
+
+
+@app.route('/pokedex/<cadena>' , methods=['GET'] )
 def pokedex(cadena):
 
     cadenasplit = cadena.split('.')
@@ -415,3 +372,19 @@ def leerhistorial():
                     cookie = {'nombre':cadena[0],'link':cadena[1]}
                 resp.append(cookie)
     return resp
+
+
+
+@app.route('/pokedexAPI/<pokemon_id>' ,  methods=['GET', 'POST', 'DELETE', 'PUT'])  
+def pokemon(pokemon_id):
+    if request.method == 'GET':
+        if (model.exits(pokemon_id)):
+            return model.busquedapokedexjson(pokemon_id)
+        else:
+            contenido = {"detalles": "Hubo un error en la solicitud"}
+            resp = jsonify(contenido)
+            resp.status_code = 400 # aquí cambiamos el código de estado a 400 (código muy común en caso de errores de solicitud)
+            return resp
+##
+## Actually setup the Api resource routing here
+##

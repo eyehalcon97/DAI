@@ -5,58 +5,6 @@
       <h1> {{ solucion }}  </h1>
       {%endif%}
 
-      {% if friends %}
-
-     
-        <form action="{{ url_for('busquedafriends' )}} " method="post">
-            <h1>Buscar :</h1>
-            <div class="mb-3">
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduzca el nombre de usuario" required>
-            </div>
-            <div class="col-12">
-                <input type="submit" class="btn btn-primary" id="send-signup" name="signup" value="Buscar"  />
-            </div>
-        </form>
-
-      {% for i in capitulos %}
-      <div class="friends" onclick="window.open('{{i.url}}', );"style="cursor: pointer;">&nbsp;
-        <h1>Temporada{{i.season}} Capitulo: {{i.number}}</h1>
-        <h1>{{i.name}}</h1>
-        <h1>Fecha de emision: {{i.airdate}}</h1>
-        <h1>Duracion: {{i.runtime}} min</h1>
-        <h1>Sinopsis: {{i.summary}}</h1>
-        <img src={{i.image.medium}} alt="">
-      </div>
-      
-      {% endfor %}
-        <div class="pagination">
-          <ul class="pagination">
-            {%if atras != -1%}
-            <li class="page-item active"><a class="page-link" href="{{ url_for('friends',cadena=atras ) }}">Pagina Anterior</a></li>
-            {% endif %}
-  
-            {% for i in paginas %}
-  
-            {%if i.numero == paginado%}
-            <li class="page-item active"><a class="page-link" href="{{ url_for('friends',cadena=i.valor ) }}">{{i.numero}}</a></li>
-            {% else %}
-            <li class="page-item"><a class="page-link" href="{{ url_for('friends',cadena=i.valor ) }}">{{i.numero}}</a></li>
-            {% endif %}
-  
-            {% endfor %}
-  
-            {%if siguiente != 0%}
-            <li class="page-item active"><a class="page-link" href="{{ url_for('friends',cadena=siguiente ) }}">Siguiente Pagina</a></li>
-            {% endif %}
-          </ul>
-
-        </div>
-        
-
-
-
-      {%endif%}
-
       {% if pokemon %}
 
 
