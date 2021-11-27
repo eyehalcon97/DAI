@@ -3,7 +3,7 @@
 from flask import Flask , session ,request , render_template , jsonify
 from flask import make_response , redirect , url_for
 from flask_restful import reqparse, abort, Api, Resource
-
+# pip install flask'resful
 
 import random
 import re
@@ -58,7 +58,7 @@ def entrar():
                 solucion = 'La contraseña es incorrecta'
                 return render_template('entrar.html',solucion=solucion,visitado=visitado)
             else:
-                solucion = 'El usuario no existe'
+                solucion = 'Usuario o contraseña incorrecta'
                 return render_template('entrar.html',solucion=solucion,visitado=visitado)
             
     else:
@@ -82,7 +82,7 @@ def registrar():
         else:
             if model.nuevousuario(nombre,psw):
                 solucion = ' Se ha creado el usuario : ' + str(nombre)
-                return enviarcookie(make_response(render_template('index.html',solucion=solucion,nombre=nombre,visitado=visitado),nombre))
+                return enviarcookie(render_template('index.html',solucion=solucion,nombre=nombre,visitado=visitado),nombre)
     else:
         if nombre == None:
             solucion = 'Registro de nuevo usuario : '
@@ -381,10 +381,25 @@ def pokemon(pokemon_id):
         if (model.exits(pokemon_id)):
             return model.busquedapokedexjson(pokemon_id)
         else:
-            contenido = {"detalles": "Hubo un error en la solicitud"}
-            resp = jsonify(contenido)
+            resp = jsonify({"detalles": "No se encontro el pokemon con el argumento : " +  pokemon_id})
             resp.status_code = 400 # aquí cambiamos el código de estado a 400 (código muy común en caso de errores de solicitud)
             return resp
+    if request.method == 'DELETE':
+        if (model.exits(pokemon_id)):
+            return model.eliminarpokemon(pokemon_id)
+        else:
+            resp = jsonify({"detalles": "No se pudo borrar el pokemon : " +  pokemon_id})
+            resp.status_code = 400 # aquí cambiamos el código de estado a 400 (código muy común en caso de errores de solicitud)
+            return resp
+    if request.method == 'POST':
+        data = request.get_json()
+        return model.addpokemon(data)
+    
+    if request.method == 'PUT':
+        data = request.get_json()
+        return model.modpokemon(pokemon_id,data)
+        
+
 ##
 ## Actually setup the Api resource routing here
 ##

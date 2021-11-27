@@ -5,9 +5,13 @@ if [ $1 = "get"  ]; then
     curl $link$2;
 fi
 if [ $1 = "delete"  ]; then
-    curl $link$2 -X DELETE -v;
+    curl -X DELETE $link$2;
 fi
-
+var="unir"
 if [ $1 = "add"  ]; then
-    curl $link -X POST -v
+    curl -X POST -H 'Content-Type: application/json' $link$var -d @$2
+fi
+var="modificar"
+if [ $1 = "put"  ]; then
+    curl -X PUT -H 'Content-Type: application/json' $link$2 -d @$3
 fi
