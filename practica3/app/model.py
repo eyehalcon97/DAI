@@ -52,7 +52,7 @@ def exiteuser(nombre):
 
 def modificar(nombre,nombrenuevo,psw):
     dbsesion[nombrenuevo] = dbsesion[nombre]
-    del db[nombre]
+    del dbsesion[nombre]
     dbsesion[nombrenuevo] = {'psw':psw}
     return True
 
