@@ -12,6 +12,6 @@ if [ $1 = "add"  ]; then
     curl -X POST -H 'Content-Type: application/json' $link$var -d @$2
 fi
 var="mod"
-if [ $1 = "put"  ]; then
+if [ $1 = "mod"  ]; then
     curl -X PUT -H 'Content-Type: application/json' $link$2 -d @$3
 fi
