@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+    {% block content %} 
+
+    <h1>Galerias : </h1>
+    {% for x in galerias %}
+        <h1> {{x.nombre}} ,  {{x.direccion}} </h1>
+    {% endfor %}
+
+
+    <h1>Cuadros : </h1>
+    {% for x in cuadros %}
+        <h1> {{x.nombre}} , {{x.galeria}} , {{x.autor }} , {{x.fecha_creacion}} </h1>
+    {% endfor %}
+
+
+
+    {% endblock %}
+ 

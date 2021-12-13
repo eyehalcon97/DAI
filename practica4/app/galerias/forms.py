@@ -1,22 +1,41 @@
 from django import forms
-from django.db.models import fields
 from django.forms import widgets
+
+
 from . import models
 
+from django.forms.models import ModelForm
 
-class CuadroForm(forms.Form):
-    nombre = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'nombre'}))
-    galeria = forms.ModelMultipleChoiceField(queryset=models.Galeria.objects.all())
-    autor = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'autor'}))
-    fecha_creacion = forms.DateField(widget=forms.DateInput(),)
+
+
+
+
+class GaleriaForm(ModelForm):
+  class Meta:
+    model = models.Galeria
+    fields = ('nombre' , 'direccion',)
+    widgets ={
+        'nombre' : forms.TextInput(attrs={'class' : 'form-control', 'placeholder': 'nombre' }),
+        'direccion' : forms.TextInput(attrs={'class' : 'form-control', 'placeholder': 'direccion' }),
+    }
     
-class GaleriaForm(forms.Form):
-    nombre = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'nombre'}))
-    direccion = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'direccion'}))
+class CuadroForm(ModelForm):
+  class Meta:
+    model = models.Cuadro
+    fields = '__all__'
+    widgets ={
+        'nombre' : forms.TextInput(attrs={'class' : 'form-control', 'placeholder': 'nombre' }),
+        'autor' : forms.TextInput(attrs={'class' : 'form-control', 'placeholder': 'autor' }),
+        'fechacreaion' : forms.DateInput(attrs={'class' : 'form-control'}),
+    }
 
-class EliminarGaleriaForm(forms.Form):
+
+
+class ElegirGaleriaForm(forms.Form):
     galeria = forms.ModelMultipleChoiceField(queryset=models.Galeria.objects.all())
 
 
-class EliminarCuadroForm(forms.Form):
+class ElegirCuadroForm(forms.Form):
     cuadro = forms.ModelMultipleChoiceField(queryset=models.Cuadro.objects.all())
+
+

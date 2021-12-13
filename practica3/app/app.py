@@ -237,23 +237,6 @@ def valido(cadena):
     return enviarcookie(render_template('index.html',solucion=solucion,nombre=nombre,visitado=visitado),None,pagina,link,cadena)
 
 
-@app.route('/busquedapokedex' , methods=['POST'])
-def busquedapokedex():
-    if request.method == 'POST':
-            datos = request.form['nombre']
-            datos = datos + '.' + 'busqueda' + '.' + '0'
-            return redirect(url_for('pokedex', cadena = datos))
-
-
-
-
-@app.route('/eliminarpokemon', methods=['DELETE'])
-def eliminarpokemon():
-    datos = request.form['nombre']
-    model.eliminarpokemon(datos)
-    return redirect(url_for('pokedex', '..0'))
-    
-
 
 @app.route('/pokedex/<cadena>' , methods=['GET'] )
 def pokedex(cadena):

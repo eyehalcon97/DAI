@@ -13,7 +13,9 @@ urlpatterns = [
     path('CrearGaleria', views.CrearGaleria, name='CrearGaleria'),
     path('EliminarGaleria',views.EliminarGaleria, name='EliminarGaleria'),
     path('EliminarCuadro',views.EliminarCuadro, name='EliminarCuadro'),
-    path('ModificarGaleria',views.ModificarGaleria, name='ModificarGaleria'),
-    path('ModificarCuadro',views.ModificarCuadro, name='ModificarCuadro'),
+    path('ElegirModificarGaleria',views.ElegirModificarGaleria, name='ElegirModificarGaleria'),
+    path('ModificarGaleria/<int:numero>',views.ModificarGaleria, name='ModificarGaleria'),
+    path('ElegirModificarCuadro',views.ElegirModificarCuadro, name='ElegirModificarCuadro'),
+    path('ModificarCuadro/<int:numero>',views.ModificarCuadro, name='ModificarCuadro'),
     
 ]
