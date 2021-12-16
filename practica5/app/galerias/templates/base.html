@@ -27,6 +27,7 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/Ver">Ver Cuadros y Galerias</a>
               </li>
+              {% if username.is_superuser %}
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/CrearGaleria">CrearGaleria</a>
               </li>
@@ -36,6 +37,8 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/EliminarGaleria">EliminarGaleria</a>
               </li>
+              {% endif %}
+              {% if username.is_staff %}
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/CrearCuadro">CrearCuadro</a>
               </li>
@@ -45,6 +48,20 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/EliminarCuadro">EliminarCuadro</a>
               </li>
+              {% endif %}
+              {% if username %}
+              <h3>¡Hola {{username.username}}!</h3>
+              <form action="{% url 'account_logout' %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" class="btn btn-secondary" value="Logout" name="Logout"/>
+              </form>
+          {% else %}
+              <div class="mr-md-3 ">
+                  <a href="{% url 'account_login' %}" class="btn btn-secondary">Sign In</a></li>
+                  <a href="{% url 'account_signup' %}" class="btn btn-secondary">Sign Up</a></li>     
+              </div>
+              
+          {% endif %}
             </ul>
           </div>
         </div>
@@ -56,6 +73,7 @@
   <body>
 
 <div class="row">
+  <h1>{{msg}}</h1>
       {% block content %}{% endblock %}
 
 </div>
