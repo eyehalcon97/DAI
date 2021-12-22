@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'allauth.account', # new
     'allauth.socialaccount', # new
     'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
 
 ]
 
