@@ -19,7 +19,7 @@ class Cuadro(models.Model):
   autor            = models.CharField(max_length=100)
   fecha_creacion   = models.DateField(default=timezone.now)
   imagen           = models.ImageField(upload_to ='')
-   
+  
 
   def __str__(self):
     return self.nombre
