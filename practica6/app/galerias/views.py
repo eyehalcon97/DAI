@@ -23,7 +23,6 @@ def index(request):
     return render(request, 'base.html')
 
 def ejemplo(request):
-    if request.method == 'POST':
         return render(request,'ejemplo.html')
 
 def VerGalerias(request):
