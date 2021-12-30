@@ -38,33 +38,13 @@ def VerGalerias(request):
 
 def VerCuadros(request):
     lista_cuadros = models.Cuadro.objects.all()
+    formcrearcuadro = forms.CuadroForm
 
     if request.user.is_authenticated:
-        return HttpResponse( render( request, 'verCuadros.html', {  'cuadros' : lista_cuadros , 'username':request.user  } ) )
-    return HttpResponse( render( request, 'verCuadros.html', {  'cuadros' : lista_cuadros } ))
+        return HttpResponse( render( request, 'verCuadros.html', {  'cuadros' : lista_cuadros ,'formcrearcuadro':formcrearcuadro, 'username':request.user  } ) )
+    return HttpResponse( render( request, 'verCuadros.html', {  'cuadros' : lista_cuadros ,'formcrearcuadro':formcrearcuadro} ))
 
 
-
-def CrearCuadro(request):
-    if request.user.is_staff:
-        if request.method == 'POST':
-            formulario = forms.CuadroForm(request.POST, request.FILES)
-            if formulario.is_valid():
-                formulario.save()
-                msg = "Se ha creado el cuadro"
-            else:
-                msg = "Error al crear el cuadro"
-            return HttpResponse( render( request, 'base.html', {'username':request.user , 'msg': msg } ) )
-        else:   
-            form = forms.CuadroForm()
-            return HttpResponse(render(request, 'formularioCrear.html', {'form': form , 'username':request.user }))
-    else:
-        msg = "No tienes permisos para realizar esta accion"
-        if request.user.is_authenticated:
-            return HttpResponse( render( request, 'base.html', {'username':request.user , 'msg': msg } ) )
-        else:
-            return HttpResponse( render( request, 'base.html', {'msg': msg } ) )
-    
 
 def CrearGaleria(request):
     if request.method == 'POST':
