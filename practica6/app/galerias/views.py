@@ -69,10 +69,19 @@ def CrearCuadro(request):
 def CrearGaleria(request):
     if request.method == 'POST':
         formulario = forms.GaleriaForm(request.POST)
+        #print (request.POST['nombre'])
         if formulario.is_valid():
             formulario.save()
     return HttpResponseRedirect('/VerGalerias')
 
+
+
+def CrearCuadro(request):
+    if request.method == 'POST':
+        formulario = forms.CuadroForm(request.POST, request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+    return HttpResponseRedirect('/VerCuadros')
 
 def EliminarGaleria(request, numero):
     if request.method == 'DELETE':
@@ -80,12 +89,27 @@ def EliminarGaleria(request, numero):
         galeria.delete()
     return HttpResponseRedirect('/VerGalerias')
 
+def EliminarCuadro(request, numero):
+    if request.method == 'DELETE':
+        cuadro = models.Cuadro.objects.get(id=numero)
+        cuadro.imagen.delete()
+        cuadro.delete()
+    return HttpResponseRedirect('/VerCuadros')
+
 
 
 def ModificarFormularioGaleria(request, numero):
     if request.method == 'GET':
         galeria = models.Galeria.objects.get(id=numero)
-        formulario = forms.GaleriaForm(instance=galeria)
+        formulario = str(forms.GaleriaForm(instance=galeria))
+        
+        return HttpResponse(formulario)
+
+
+def ModificarFormularioCuadro(request, numero):
+    if request.method == 'GET':
+        cuadro = models.Cuadro.objects.get(id=numero)
+        formulario = str(forms.CuadroForm(instance=cuadro))
         
         return HttpResponse(formulario)
 
@@ -95,7 +119,6 @@ def EditarGaleria(request,numero):
         galeria = models.Galeria.objects.get(id = numero)
         formulario = forms.GaleriaForm(request.POST,instance=galeria)
         if formulario.is_valid():
-            print("entro")
             formulario.save()
         else:
             
@@ -103,65 +126,16 @@ def EditarGaleria(request,numero):
     print("fuera")
     return HttpResponseRedirect('/VerGalerias')
 
-
-
-
-
-
-
-
-
-
-def EliminarCuadro(request):
-    if request.user.is_staff:
-        if request.method == 'POST':
-            formulario = forms.ElegirCuadroForm(request.POST)
-            if formulario.is_valid():
-                numero = request.POST.get('cuadro')
-                cuadro = models.Cuadro.objects.get(id = numero)
-                cuadro.imagen.delete()
-                cuadro.delete()
-                msg = "El cuadro ha sido borrado"
-            else:
-                msg = "Error al borrar el cuadro"
-            return HttpResponse( render( request, 'base.html', {'username':request.user , 'msg': msg } ) )
-        else:
-            if len(models.Cuadro.objects.all()) == 0:
-                msg = "No hay cuadros creados"
-                form = ""
-            else:
-                msg = "Cual de los siguientes cuadros desea eliminar"  
-                form = forms.ElegirCuadroForm()
-            return HttpResponse(render(request, 'formularioEliminar.html', {'form': form , 'msg': msg , 'username':request.user }))
-    else:
-        msg = "No tienes permisos para realizar esta accion"
-        if request.user.is_authenticated:
-            return HttpResponse( render( request, 'base.html', {'username':request.user , 'msg': msg } ) )
-        else:
-            return HttpResponse( render( request, 'base.html', {'msg': msg } ) )
-
-
-
-
-def ModificarCuadro(request,numero):
-    if request.user.is_staff:
+def EditarCuadro(request,numero):
+    if request.method == 'POST':
         cuadro = models.Cuadro.objects.get(id = numero)
-        if request.method == 'POST':
-            formulario = forms.CuadroForm(request.POST,instance=cuadro)
-            if formulario.is_valid():
-                formulario.save()
-                msg = "El cuadro ha sido modificado"
-            else:
-                msg = "Error al modificar el cuadro"
-            return HttpResponse(render(request, 'base.html', { 'msg': msg , 'username':request.user }))
-        else:
-            form = forms.CuadroForm(instance=cuadro)
-            return HttpResponse(render(request, 'formularioModificar.html', {'form': form , 'username':request.user }))
-    else:
-        msg = "No tienes permisos para realizar esta accion"
-        if request.user.is_authenticated:
-            return HttpResponse( render( request, 'base.html', {'username':request.user , 'msg': msg } ) )
-        else:
-            return HttpResponse( render( request, 'base.html', {'msg': msg } ) )
+        formulario = forms.CuadroForm(request.POST,instance=cuadro)
+        if formulario.is_valid():
+            formulario.save()
+    return HttpResponseRedirect('/VerCuadros')
+
+
+
+
 
 

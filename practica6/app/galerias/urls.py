@@ -15,10 +15,11 @@ urlpatterns = [
     path('CrearCuadro', views.CrearCuadro, name='CrearCuadro'),
     path('CrearGaleria', views.CrearGaleria, name='CrearGaleria'),
     path('EliminarGaleria/<int:numero>',views.EliminarGaleria, name='EliminarGaleria'),
-    path('EliminarCuadro',views.EliminarCuadro, name='EliminarCuadro'),
+    path('EliminarCuadro/<int:numero>',views.EliminarCuadro, name='EliminarCuadro'),
     path('EditarGaleria/<int:numero>',views.EditarGaleria, name='EditarGaleria'),
+    path('EditarCuadro/<int:numero>',views.EditarCuadro, name='EditarCuadro'),
     path('ModificarFormularioGaleria/<int:numero>',views.ModificarFormularioGaleria, name='ModificarFormularioGaleria'),
-
+    path('ModificarFormularioCuadro/<int:numero>',views.ModificarFormularioCuadro, name='ModificarFormularioCuadro'),
 
     
 ] + static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
