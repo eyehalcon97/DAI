@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render, HttpResponse
 from django.template import Template, Context, loader
 from django.middleware import csrf
 from django.http import JsonResponse
-from os import remove
+from os import remove, truncate
 
 
 from . import forms
@@ -18,6 +18,7 @@ from . import models
 
 
 def index(request):
+
     if request.user.is_authenticated:
         return HttpResponse( render( request, 'base.html', {'username':request.user } ) )
     return render(request, 'base.html')
@@ -100,10 +101,6 @@ def EditarGaleria(request,numero):
         formulario = forms.GaleriaForm(request.POST,instance=galeria)
         if formulario.is_valid():
             formulario.save()
-        else:
-            
-            print("no valido")
-    print("fuera")
     return HttpResponseRedirect('/VerGalerias')
 
 def EditarCuadro(request,numero):
@@ -113,9 +110,3 @@ def EditarCuadro(request,numero):
         if formulario.is_valid():
             formulario.save()
     return HttpResponseRedirect('/VerCuadros')
-
-
-
-
-
-

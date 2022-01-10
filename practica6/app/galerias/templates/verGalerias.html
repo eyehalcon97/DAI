@@ -23,12 +23,14 @@ $(function() {
                         <div class="col-xs-6">
                             <h2>Galerias</h2>
                         </div>
-
+                        {% if username.is_superuser %}
                         <div class="col-xs-6">
                             <a href="#NuevaGaleria" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Nueva Galeria</span></a>						
                             						
 
                         </div>
+                        {% endif %}
+
                     </div>
                 </div>
                 <table class="table table-striped table-hover">
@@ -69,8 +71,10 @@ $(function() {
                                 <a href="#Ubicacion" class="btn btn-success" data-toggle="modal"><i class="material-icons"></i> <span>{{x.direccion}}</span></a>
                                 
                             <td>
+                                {% if username.is_superuser %}
                                 <a href="#EditarGaleria" class="edit"  data-toggle="modal" onclick="seleccioneditar({{x.id}})"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                 <a href="#EliminarGaleria" onclick="seleccionborrar({{x.id}})"  class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                {% endif %}
                             </td>
                             
                         </tr>
@@ -100,11 +104,7 @@ $(function() {
                             zoom: 15,
                         });
                         }
-                        var marker = new google.maps.Marker({
-                            position: {lat: 37.197119700771026, lng: -3.62440789948008},
-                            map: map,
-                        title: direccion
-                          });
+
                     </script>
                     <div id="content-map">
                         <div id = "map"></div>
@@ -124,7 +124,6 @@ $(function() {
                     <form id="formulariocrear">{% csrf_token%}
                         <div class="modal-header">						
                             <h4 class="modal-title">Crear Galeria</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
                         <div class="modal-body">					
                             <div class="form-group" id="form">
@@ -158,7 +157,6 @@ $(function() {
                     <form id="formularioeditar" >{% csrf_token%}
                         <div class="modal-header">						
                             <h4 class="modal-title">Editar Galeria</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
 
                         <div class="modal-body">					
@@ -196,7 +194,6 @@ $(function() {
                     <form > {% csrf_token %}   
                     <div class="modal-header">						
                         <h4 class="modal-title">Eliminar Galeria</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">					
                         <p>¿Estas seguro de que desea eliminar?</p>

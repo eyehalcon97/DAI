@@ -1,4 +1,16 @@
+footer{
+	justify-content : center;
+	text-align: center;
+	background-color: #67badd;
 
+}
+.navbar {
+    padding-top: 0.0rem;
+    padding-bottom: 0.0rem;
+}
+#centro{
+	justify-content: center;
+}
 #map {
     height: 100%;
     min-height: 600px;

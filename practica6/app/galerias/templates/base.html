@@ -19,28 +19,34 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script src="https://malsup.github.io/jquery.form.js"></script> 
-    
+
     {% load static %}
-    <link id="estilos" href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link id="estilos" href="" rel="stylesheet">
 
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-
     <script>
-      var modo=0;
+      var modo= localStorage.getItem("modo")
+      if(modo == 0){
+        document.getElementById('estilos').href = "{% static 'css/style.css' %}";
+      }else{
+        document.getElementById('estilos').href = "{% static 'css/style-oscuro.css' %}";
+      }
 
       function cambiarmodo(){
-          if(modo==0){
-            document.getElementById('estilos').href = './static/css/style-oscuro.css';
-            modo=1;
-          }
-          else{
-            document.getElementById('estilos').href = './static/css/style.css';
-            modo=0;
-          }
-          
-      }
+        if(modo==0){
+          document.getElementById('estilos').href = "{% static 'css/style-oscuro.css' %}";
+          localStorage.setItem("modo","1");
+          modo=1;
+        }
+        else{
+          document.getElementById('estilos').href = "{% static 'css/style.css' %}";
+          localStorage.setItem("modo","0");
+          modo=0;
+        }
+        
+    }
     </script>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light ">
@@ -53,37 +59,15 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" onclick="cambiarmodo()">Cambiar modo</a>
-              </li>
+              
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/VerCuadros">Ver Cuadros</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/VerGalerias">Ver Galerias</a>
               </li>
-              {% if username.is_superuser %}
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/CrearGaleria">CrearGaleria</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/ElegirModificarGaleria">ModificarGaleria</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/EliminarGaleria">EliminarGaleria</a>
-              </li>
-              {% endif %}
-              {% if username.is_staff %}
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/CrearCuadro">CrearCuadro</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/ElegirModificarCuadro">ModificarCuadro</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/EliminarCuadro">EliminarCuadro</a>
-              </li>
-              {% endif %}
+
+
               {% if username %}
               <h3>¡Hola {{username.username}}!</h3>
               <form action="{% url 'account_logout' %}" method="post">
@@ -97,6 +81,9 @@
               </div>
               
           {% endif %}
+          <li class="nav-item">
+            <a class="btn btn-success" onclick="cambiarmodo()" data-toggle="modal"><i class="material-icons">&#xe90f;</i></a>
+          </li>
             </ul>
           </div>
         </div>
@@ -112,16 +99,14 @@
       {% block content %}{% endblock %}
 
 </div>
-<footer>
-  <div class="row">
-      <h1>Todos los derechos reservados</h1>
-  </div>
-</footer>
+
 
 
 
 
   </body>
-
+  <footer>
+    <h1>Todos los derechos reservados</h1>
+</footer>
   
 </html>
