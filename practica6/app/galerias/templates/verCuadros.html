@@ -21,15 +21,13 @@ $(function() {
                 <div class="table-title">
                     <div class="row">
                         <div class="col-xs-6">
-                            <h2>Galerias</h2>
+                            <h2>Cuadros</h2>
                         </div>
                         {% if username.is_staff %}
                         <div class="col-xs-6">
                             
                             <a href="#NuevoCuadro" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Nuevo Cuadro</span></a>						
      
-
-                       
                         </div>
                         {% endif %}
                     </div>
@@ -54,7 +52,7 @@ $(function() {
                             function seleccioneditar(numero) {
                                 seleccionado =numero;
                                 $.ajax({
-                                    url: `http://localhost:8000/ModificarFormularioCuadro/${seleccionado}`,
+                                    url: `http://127.0.0.1:8000/ModificarFormularioCuadro/${seleccionado}`,
                                     method: 'GET',
                                     success: function(data){  
                                         document.getElementById('instante').innerHTML = data;
@@ -166,7 +164,7 @@ $(function() {
 
                             function Eliminar(){
                                 $.ajax({
-                                    url: `http://localhost:8000/EliminarCuadro/${seleccionado}`,
+                                    url: `http://127.0.0.1:8000/EliminarCuadro/${seleccionado}`,
                                     method: 'DELETE',
                                 }); 
                             }

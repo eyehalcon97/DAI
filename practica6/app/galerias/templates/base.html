@@ -67,24 +67,26 @@
                 <a class="nav-link active" aria-current="page" href="/VerGalerias">Ver Galerias</a>
               </li>
 
-
+            
+            </ul>
+            <div class="navbar-nav me-auto mb-2 mb-lg-0" id="derecha">
               {% if username %}
               <h3>¡Hola {{username.username}}!</h3>
               <form action="{% url 'account_logout' %}" method="post">
                   {% csrf_token %}
                   <input type="submit" class="btn btn-secondary" value="Logout" name="Logout"/>
               </form>
-          {% else %}
+              {% else %}
               <div class="mr-md-3 ">
                   <a href="{% url 'account_login' %}" class="btn btn-secondary">Sign In</a></li>
                   <a href="{% url 'account_signup' %}" class="btn btn-secondary">Sign Up</a></li>     
               </div>
               
-          {% endif %}
-          <li class="nav-item">
-            <a class="btn btn-success" onclick="cambiarmodo()" data-toggle="modal"><i class="material-icons">&#xe90f;</i></a>
-          </li>
-            </ul>
+            {% endif %}
+            <li class="nav-item">
+              <a class="btn btn-success" onclick="cambiarmodo()" data-toggle="modal"><i class="material-icons">&#xe90f;</i></a>
+            </li>
+          </div>
           </div>
         </div>
       </nav>

@@ -245,3 +245,10 @@ footer{
 	.modal form label {
 		font-weight: normal;
 	}
+	#derecha{
+		float: right;
+	}
+	#centro{
+		text-align: center;
+
+	}

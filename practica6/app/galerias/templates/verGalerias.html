@@ -51,7 +51,7 @@ $(function() {
                             function seleccioneditar(numero) {
                                 seleccionado =numero;
                                 $.ajax({
-                                    url: `http://localhost:8000/ModificarFormularioGaleria/${seleccionado}`,
+                                    url: `http://127.0.0.1:8000/ModificarFormularioGaleria/${seleccionado}`,
                                     method: 'GET',
                                     success: function(data){  
                                         document.getElementById('instante').innerHTML = data;
@@ -135,7 +135,7 @@ $(function() {
                                 
                                 var data =($('#formulariocrear').serialize());
                                 $.ajax({
-                                    url: 'http://localhost:8000/CrearGaleria',
+                                    url: 'http://127.0.0.1:8000/CrearGaleria',
                                     method: 'POST',
                                     data : data,
                                 }); 
@@ -168,7 +168,7 @@ $(function() {
                             function Editar(){
 
                                 $.ajax({
-                                    url: `http://localhost:8000/EditarGaleria/${seleccionado}`,
+                                    url: `http://127.0.0.1:8000/EditarGaleria/${seleccionado}`,
                                     method: 'POST',
                                     data : $('#formularioeditar').serialize(),
                                 }); 
@@ -205,7 +205,7 @@ $(function() {
 
                             function Eliminar(){
                                 $.ajax({
-                                    url: `http://localhost:8000/EliminarGaleria/${seleccionado}`,
+                                    url: `http://127.0.0.1:8000/EliminarGaleria/${seleccionado}`,
                                     method: 'DELETE',
                                 }); 
                             }

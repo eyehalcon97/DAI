@@ -4,6 +4,7 @@ footer{
 	background-color: #1d83af;
 
 }
+
 .container-fluid{
 	background-color:#23303f ;
 	border-color: #000;
@@ -286,4 +287,12 @@ footer{
 	}	
 	.modal form label {
 		font-weight: normal;
+	}
+
+	#derecha{
+		float: right;
+	}
+	#centro{
+		text-align: center;
+
 	}
